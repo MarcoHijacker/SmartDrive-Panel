@@ -257,14 +257,18 @@ const toggleSessionStatus = async (session) => {
   try {
     if (session.status === 1) {
       await sessionService.deactivateSession(session._id);
-      toast.add({ severity: 'success', summary: 'Success', detail: 'Session deactivated', life: 3000 });
+      toast.add({ severity: 'secondary', summary: 'Success', detail: 'Session deactivated', life: 3000 });
     } else {
       await sessionService.activateSession(session._id);
       toast.add({ severity: 'success', summary: 'Success', detail: 'Session activated', life: 3000 });
     }
     fetchSessions();
   } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to update session status', life: 3000 });
+    if(error.response.status === 409) {
+      toast.add({ severity: 'error', summary: 'Error', detail: 'Only one session can be active', life: 3000 });
+    } else {
+      toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to update session status', life: 3000 });
+    }
   }
 };
 
