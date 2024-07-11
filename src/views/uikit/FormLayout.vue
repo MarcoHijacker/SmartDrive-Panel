@@ -8,20 +8,9 @@
           <span>Create New Session</span>
         </h5>
         <div class="grid formgrid">
-          <div class="col-12 lg:col-4 mb-2">
+          <div class="col-12 lg:col-8 mb-2">
             <InputText id="sessionName" v-model="sessionName" placeholder="Session Name" />
             <small v-if="formSubmitted && !sessionName" class="p-error"><b>Session Name</b> is required</small>
-          </div>
-          <div class="col-12 lg:col-4 mb-2">
-            <Dropdown
-              id="sessionStatus"
-              v-model="sessionStatus"
-              :options="statusOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select Status"
-            />
-            <small v-if="formSubmitted && !sessionStatus" class="p-error"><b>Status</b> is required</small>
           </div>
           <div class="col-12 lg:col-4 mb-5 flex align-items-center">
             <Button label="Create Session" icon="pi pi-check" @click="createSession" />
@@ -65,8 +54,19 @@
           <Column field="status" header="Status">
             <template #body="slotProps">
               <i
-                :class="slotProps.data.status === 1 ? 'pi pi-check' : 'pi pi-lock'"
-                :style="{ color: slotProps.data.status === 1 ? 'green' : 'brown' }"
+                v-if="slotProps.data.status === 1"
+                class="pi pi-check"
+                style="color: green"
+              ></i>
+              <i
+                v-else-if="slotProps.data.status === 2"
+                class="pi pi-lock"
+                style="color: brown"
+              ></i>
+              <i
+                v-else
+                class="pi pi-question-circle"
+                style="color: grey"
               ></i>
             </template>
           </Column>
@@ -88,16 +88,14 @@
                 @click="confirmDeleteSession(slotProps.data._id)"
               />
               <Button
-                icon="pi pi-times"
-                class="p-button-rounded p-button-secondary"
-                @click="toggleSessionStatus(slotProps.data)"
-                v-if="slotProps.data.status === 1"
+                icon="pi pi-check"
+                :class="['p-button-rounded mr-2', slotProps.data.status === 1 ? 'p-button-success' : 'p-button-secondary']"
+                @click="toggleSessionStatus(slotProps.data, 1)"
               />
               <Button
-                icon="pi pi-check"
-                class="p-button-rounded p-button-primary"
-                @click="toggleSessionStatus(slotProps.data)"
-                v-if="slotProps.data.status === 2"
+                icon="pi pi-times"
+                :class="['p-button-rounded', slotProps.data.status === 2 ? 'p-button-help' : 'p-button-secondary']"
+                @click="toggleSessionStatus(slotProps.data, 2)"
               />
             </template>
           </Column>
@@ -142,7 +140,6 @@ import { calculateStyleAverage } from '../services/StyleAverageService';
 
 // Refs for session fields and lists
 const sessionName = ref('');
-const sessionStatus = ref(null); // Ensure null as default for validation
 const sessions = ref([]);
 const filteredSessions = ref([]);
 const paginatedSessions = ref([]);
@@ -183,13 +180,13 @@ const fetchSessions = async () => {
 // Create a new session
 const createSession = async () => {
   formSubmitted.value = true;
-  if (sessionName.value.trim() === '' || sessionStatus.value === null) {
+  if (sessionName.value.trim() === '') {
     toast.add({ severity: 'warn', summary: 'Validation Error', detail: 'Please provide all required fields', life: 3000 });
     return;
   }
   const newSession = {
     name: sessionName.value,
-    status: sessionStatus.value, // Directly save integer value
+    status: null, // Default status is null
     created_at: new Date().toISOString(),
   };
   try {
@@ -253,18 +250,18 @@ const deleteSession = async (sessionId) => {
 };
 
 // Activate or deactivate session
-const toggleSessionStatus = async (session) => {
+const toggleSessionStatus = async (session, newStatus) => {
   try {
-    if (session.status === 1) {
-      await sessionService.deactivateSession(session._id);
-      toast.add({ severity: 'secondary', summary: 'Success', detail: 'Session deactivated', life: 3000 });
-    } else {
+    if (newStatus === 1) {
       await sessionService.activateSession(session._id);
       toast.add({ severity: 'success', summary: 'Success', detail: 'Session activated', life: 3000 });
+    } else if (newStatus === 2) {
+      await sessionService.deactivateSession(session._id);
+      toast.add({ severity: 'secondary', summary: 'Success', detail: 'Session deactivated', life: 3000 });
     }
     fetchSessions();
   } catch (error) {
-    if(error.response.status === 409) {
+    if (error.response.status === 409) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'Only one session can be active', life: 3000 });
     } else {
       toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to update session status', life: 3000 });
@@ -321,7 +318,6 @@ watch([sessions, statusFilter, sortOrder, searchQuery, currentPage], filterAndSo
 // Reset form fields
 const resetForm = () => {
   sessionName.value = '';
-  sessionStatus.value = null; // Ensure null as default for validation
   formSubmitted.value = false;
 };
 
