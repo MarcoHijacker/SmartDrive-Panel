@@ -161,15 +161,15 @@ const toast = useToast();
 const confirmPopup = useConfirm();
 const sessionService = new SessionService();
 
-// Load all sessions on component mount
+// Load all sessions by user on component mount
 onMounted(() => {
   fetchSessions();
 });
 
-// Fetch all sessions
+// Fetch all sessions by user
 const fetchSessions = async () => {
   try {
-    const response = await sessionService.getAllSessions();
+    const response = await sessionService.getSessionsByUser();
     sessions.value = response.data;
     filterAndSortSessions();
   } catch (error) {

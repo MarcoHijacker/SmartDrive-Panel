@@ -58,7 +58,6 @@ const router = createRouter({
                     name: 'panel',
                     component: () => import('@/views/uikit/Panels.vue')
                 },
-
                 {
                     path: '/uikit/overlay',
                     name: 'overlay',
@@ -141,7 +140,8 @@ const router = createRouter({
                     name: 'documentation',
                     component: () => import('@/views/utilities/Documentation.vue')
                 }
-            ]
+            ],
+            meta: { requiresAuth: true }
         },
         {
             path: '/landing',
@@ -153,23 +153,42 @@ const router = createRouter({
             name: 'notfound',
             component: () => import('@/views/pages/NotFound.vue')
         },
-
+        {
+            path: '/auth/register',
+            name: 'register',
+            component: () => import('@/views/pages/auth/Register.vue'),
+            meta: { requiresAuth: false }
+        },
         {
             path: '/auth/login',
             name: 'login',
-            component: () => import('@/views/pages/auth/Login.vue')
+            component: () => import('@/views/pages/auth/Login.vue'),
+            meta: { requiresAuth: false }
         },
         {
             path: '/auth/access',
             name: 'accessDenied',
-            component: () => import('@/views/pages/auth/Access.vue')
+            component: () => import('@/views/pages/auth/Access.vue'),
+            meta: { requiresAuth: false }
         },
         {
             path: '/auth/error',
             name: 'error',
-            component: () => import('@/views/pages/auth/Error.vue')
+            component: () => import('@/views/pages/auth/Error.vue'),
+            meta: { requiresAuth: false }
         }
     ]
+});
+
+// Navigation guard to check authentication
+router.beforeEach((to, from, next) => {
+    const isLoggedIn = !!localStorage.getItem('jwt'); // Check if JWT token is in localStorage
+
+    if (to.matched.some(record => record.meta.requiresAuth) && !isLoggedIn) {
+        next('/auth/login'); // Redirect to login page if not authenticated
+    } else {
+        next(); // Proceed to route
+    }
 });
 
 export default router;

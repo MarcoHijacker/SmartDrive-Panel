@@ -7,9 +7,11 @@ const { layoutConfig, onMenuToggle } = useLayout();
 
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
+const userEmail = ref('');
 const router = useRouter();
 
 onMounted(() => {
+    decodeJWT();
     bindOutsideClickListener();
 });
 
@@ -58,13 +60,29 @@ const isOutsideClicked = (event) => {
 
     return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
 };
+const onLogoutClick = () => {
+    topbarMenuActive.value = false;
+    localStorage.removeItem('jwt'); // Clear the JWT from localStorage
+    router.push('/auth/login'); // Redirect to the login page
+};
+const decodeJWT = () => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            userEmail.value = payload.email;
+        } catch (error) {
+            console.error('Failed to decode JWT:', error);
+        }
+    }
+};
 </script>
 
 <template>
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
             <img :src="logoUrl" alt="logo" />
-            <span>SAKAI</span>
+            <span>SmartDrive</span>
         </router-link>
 
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
@@ -76,17 +94,24 @@ const isOutsideClicked = (event) => {
         </button>
 
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
+            <!-- <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
                 <i class="pi pi-calendar"></i>
                 <span>Calendar</span>
-            </button>
+            </button> -->
             <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
                 <i class="pi pi-user"></i>
                 <span>Profile</span>
             </button>
-            <button @click="onSettingsClick()" class="p-link layout-topbar-button">
+            <div class="flex align-items-center">
+                <span class="layout-topbar-user-email">{{ userEmail }}</span> <!-- Display the user email -->
+            </div>
+            <!-- <button @click="onSettingsClick()" class="p-link layout-topbar-button">
                 <i class="pi pi-cog"></i>
                 <span>Settings</span>
+            </button> -->
+            <button @click="onLogoutClick()" class="p-link layout-topbar-button">
+                <i class="pi pi-sign-out"></i>
+                <span>Logout</span>
             </button>
         </div>
     </div>
