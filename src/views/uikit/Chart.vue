@@ -201,6 +201,7 @@ const setLineChartOptions = () => {
         scales: {
             x: {
                 ticks: {
+                    display: false,
                     color: textColorSecondary
                 },
                 grid: {
@@ -249,6 +250,7 @@ const setPitchRollChartOptions = () => {
         scales: {
             x: {
                 ticks: {
+                    display: false,
                     color: textColorSecondary
                 },
                 grid: {
@@ -258,7 +260,9 @@ const setPitchRollChartOptions = () => {
             },
             y: {
                 ticks: {
-                    color: textColorSecondary
+                    color: textColorSecondary,
+                    min: -0.003, // Adjusted min value for better zoom
+                    max: 0.003, // Adjusted max value for better zoom
                 },
                 grid: {
                     color: surfaceBorder,
@@ -272,13 +276,17 @@ const setPitchRollChartOptions = () => {
 const mapPath = ref([]);
 const map = ref(null);
 const mapElement = ref(null);
+const polyline = ref(null);
 
 const updateMapPath = () => {
     mapPath.value = samples.value.map(sample => [sample.latitude, sample.longitude]);
     if (map.value) {
+        if (polyline.value) {
+            map.value.removeLayer(polyline.value);
+        }
         const latlngs = mapPath.value;
-        L.polyline(latlngs, { color: 'blue' }).addTo(map.value);
-        map.value.fitBounds(L.polyline(latlngs).getBounds());
+        polyline.value = L.polyline(latlngs, { color: 'blue' }).addTo(map.value);
+        map.value.fitBounds(polyline.value.getBounds());
     }
 };
 

@@ -105,10 +105,10 @@ const decodeJWT = () => {
             <div class="flex align-items-center">
                 <span class="layout-topbar-user-email">{{ userEmail }}</span> <!-- Display the user email -->
             </div>
-            <!-- <button @click="onSettingsClick()" class="p-link layout-topbar-button">
+            <button @click="onSettingsClick()" class="p-link layout-topbar-button">
                 <i class="pi pi-cog"></i>
                 <span>Settings</span>
-            </button> -->
+            </button>
             <button @click="onLogoutClick()" class="p-link layout-topbar-button">
                 <i class="pi pi-sign-out"></i>
                 <span>Logout</span>
