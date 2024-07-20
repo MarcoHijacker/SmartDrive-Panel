@@ -1,4 +1,4 @@
-# SmartDrive-Panel
+# Front-end Progetto SmartDrive (Longo-Tarantino)
 
 ## Panoramica
 SmartDrive-Panel è un progetto front-end sviluppato in Vue.js per l'interazione con il backend di SmartDrive. Questo pannello consente agli utenti di visualizzare e analizzare i dati di guida raccolti dal backend.
