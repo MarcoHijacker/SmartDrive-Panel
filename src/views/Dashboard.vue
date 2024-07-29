@@ -11,7 +11,7 @@
                     <Column field="average_style" header="Style Avg." :sortable="true">
                         <template #body="slotProps">
                             <span :style="{ color: getStyleColor(slotProps.data.average_style), fontWeight: 'bold' }">
-                                {{ formatValue(slotProps.data.average_style) }}
+                                {{ formatValue(slotProps.data.average_style) }} {{ getStyleEmoticon(slotProps.data.average_style) }}
                             </span>
                         </template>
                     </Column>
@@ -45,7 +45,7 @@
                     <i class="pi pi-chart-bar mr-2"></i>
                     <span>Avg. Style per Session</span>
                 </h5>
-                <Chart type="bar" :data="sessionStyleChartData" :options="lineOptions" />
+                <Chart type="bar" :data="sessionStyleChartData" :options="sessionStyleChartOptions" />
             </div>
         </div>
         <!-- Average Total Acceleration per Session -->
@@ -78,6 +78,7 @@ const sessions = ref([]);
 const sessionStyleChartData = ref(null);
 const sessionAccelerationChartData = ref(null);
 const lineOptions = ref(null);
+const sessionStyleChartOptions = ref(null);
 
 const token = localStorage.getItem('jwt');
 
@@ -207,6 +208,23 @@ const setChartOptions = () => {
             }
         }
     };
+
+    sessionStyleChartOptions.value = {
+        ...lineOptions.value,
+        plugins: {
+            ...lineOptions.value.plugins,
+            tooltip: {
+                callbacks: {
+                    label: function (tooltipItem) {
+                        const dataIndex = tooltipItem.dataIndex;
+                        const styleValue = tooltipItem.raw;
+                        const styleEmoticon = styleValue < 1.5 ? '😁' : styleValue < 2.4 ? '😊' : styleValue < 3.4 ? '😐' : '😨';
+                        return `Average Style: ${formatValue(styleValue)} ${styleEmoticon}`;
+                    }
+                }
+            }
+        }
+    };
 };
 
 const formatValue = (value) => {
@@ -225,6 +243,18 @@ const getStyleColor = (value) => {
     }
 };
 
+const getStyleEmoticon = (value) => {
+    if (value < 1.5) {
+        return '😁';
+    } else if (value < 2.4) {
+        return '😊';
+    } else if (value < 3.4) {
+        return '😐';
+    } else {
+        return '😨';
+    }
+};
+
 onMounted(() => {
     fetchSessions();
     fetchUserStatistics();
@@ -233,5 +263,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Add your styles here */
+.legend-color {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    border-radius: 50%;
+}
+
+.legend {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
 </style>

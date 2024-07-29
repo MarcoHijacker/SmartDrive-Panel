@@ -1,10 +1,10 @@
 # Front-end Progetto SmartDrive (Longo-Tarantino)
 
 ## Panoramica
-SmartDrive-Panel è un progetto front-end sviluppato in Vue.js per l'interazione con il backend di SmartDrive. Questo pannello consente agli utenti di visualizzare e analizzare i dati di guida raccolti dal backend.
+SmartDrive-Panel è un progetto front-end sviluppato in Vue.js per l'interazione con il back-end di SmartDrive. Questo pannello consente agli utenti di visualizzare ed analizzare i dati di guida raccolti dal back-end.
 
 ## Prerequisiti
-Assicurati di avere installato:
+Assicurati di avere installato sul tuo sistema:
 - Node.js (versione 14.x o superiore)
 - npm (versione 6.x o superiore)
 
@@ -14,6 +14,7 @@ Assicurati di avere installato:
 ```bash
 git clone https://github.com/MarcoHijacker/SmartDrive-Panel.git
 cd SmartDrive-Panel
+```
 
 ### Passo 2: Installa le Dipendenze del Progetto
 Installa le librerie necessarie usando `npm`:
@@ -31,17 +32,16 @@ Questo comando avvierà il server di sviluppo e aprirà automaticamente il brows
 **Nota:** Il front-end funzionerà correttamente solo se il back-end è in esecuzione. Assicurati che il backend di SmartDrive sia avviato prima di avviare il front-end.
 
 ## Configurazione del Back-end
-Se non hai ancora configurato e avviato il backend, segui le istruzioni riportate nel repository del backend per avviarlo. Il front-end si aspetta che il backend sia disponibile su `http://localhost:8000`.
+Se non hai ancora configurato e avviato il backend, segui le istruzioni riportate nel [repository del back-end](https://github.com/MarcoHijacker/SmartDrive) per avviarlo. Il front-end si aspetta che il backend sia disponibile su `http://localhost:8000`.
 
 ## Utilizzo
-Una volta che il front-end è in esecuzione, puoi interagire con le funzionalità fornite per visualizzare e analizzare i dati di guida.
+Una volta che il front-end è in esecuzione, puoi interagire con le funzionalità fornite per visualizzare ed analizzare i dati di guida.
 
 ## Contributi
-Sentiti libero di contribuire a questo progetto inviando issue o pull request. Per modifiche importanti, apri prima un'issue per discutere cosa vorresti cambiare.
+Sentiti libero di contribuire a questo progetto segnalando problemi o proponendo fix e/o add-on. Per modifiche importanti, crea un ticket per discutere cosa vorresti cambiare.
 
 ## Licenza
 Questo progetto è concesso in licenza sotto la Licenza MIT - vedi il file [LICENSE](LICENSE) per i dettagli.
 
 ## Contatti
 Per qualsiasi domanda o supporto, contatta [marco.longo@studenti.unisalento.it](mailto:marco.longo@studenti.unisalento.it) oppure [priamo.tarantino@studenti.unisalento.it](mailto:priamo.tarantino@studenti.unisalento.it).
-```

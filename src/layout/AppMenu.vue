@@ -29,13 +29,13 @@ const model = ref([
             // { label: 'Misc', icon: 'pi pi-fw pi-circle', to: '/uikit/misc' }
         ]
     },
-    // {
-    //     label: 'Prime Blocks',
-    //     items: [
-    //         { label: 'Free Blocks', icon: 'pi pi-fw pi-eye', to: '/blocks', badge: 'NEW' },
-    //         { label: 'All Blocks', icon: 'pi pi-fw pi-globe', url: 'https://www.primefaces.org/primeblocks-vue', target: '_blank' }
-    //     ]
-    // },
+    {
+        label: 'Database',
+        items: [
+            { label: 'Import Records', icon: 'pi pi-fw pi-database', to: '/blocks', badge: 'NEW' },
+            // { label: 'All Blocks', icon: 'pi pi-fw pi-globe', url: 'https://www.primefaces.org/primeblocks-vue', target: '_blank' }
+        ]
+    },
     // {
     //     label: 'Utilities',
     //     items: [
