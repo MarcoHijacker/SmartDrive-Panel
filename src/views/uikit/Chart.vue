@@ -249,7 +249,7 @@ const setLineChartOptions = () => {
                     label: function (tooltipItem) {
                         const sample = samples.value[tooltipItem.dataIndex];
                         const styleEmoticon = sample.style === 1 ? '😁' : sample.style === 2 ? '😊' : sample.style === 3 ? '😐' : '😨';
-                        return tooltipItem.dataset.label === 'Total Acceleration' ? `Total Acceleration: ${formatValue(sample.total_acceleration)} ${styleEmoticon}` : `Speed: ${formatValue(sample.speed)} ${styleEmoticon}`;
+                        return tooltipItem.dataset.label === 'Total Acceleration' ? `Total Acceleration: ${formatValue(sample.total_acceleration)} ${styleEmoticon}` : `Acceleration: ${formatValue(sample.speed)} ${styleEmoticon}`;
                     },
                     title: function (tooltipItems) {
                         const date = new Date(samples.value[tooltipItems[0].dataIndex].created_at);
@@ -294,7 +294,7 @@ const setPitchRollChartOptions = () => {
                     label: function (tooltipItem) {
                         const sample = samples.value[tooltipItem.dataIndex];
                         const styleEmoticon = sample.style === 1 ? '😁' : sample.style === 2 ? '😊' : sample.style === 3 ? '😐' : '😨';
-                        return tooltipItem.dataset.label === 'Pitch' ? `Pitch: ${formatValue(sample.pitch)} ${styleEmoticon}` : `Roll: ${formatValue(sample.roll)} ${styleEmoticon}`;
+                        return tooltipItem.dataset.label === 'Pitch' ? `Pitch: ${formatValue(sample.pitch)} ${styleEmoticon}` : `Pitch: ${formatValue(sample.roll)} ${styleEmoticon}`;
                     },
                     title: function (tooltipItems) {
                         const date = new Date(samples.value[tooltipItems[0].dataIndex].created_at);
